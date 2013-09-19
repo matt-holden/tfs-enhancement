@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "name": "TFS Portal tweaks",
+  "description": "Small tweaks to make the TFS portal better.",
+  "version": "1.0",
+  
+  "permissions": [
+    "tabs", 
+    "contextMenus",
+    "clipboardRead",
+    "clipboardWrite",
+    "storage"
+  ],
+
+  "browser_action": {
+    "default_icon": "images/tfs_logo.png",
+    "default_popup": "settings.html"
+  },
+
+  "icons": {
+    "16": "images/tfs_logo.png",
+    "48": "images/tfs_logo.png",
+    "128": "images/tfs_logo.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://tfs:8080/tfs/*"],
+      "css": ["styles/main.css"],
+      "js": ["js/libs/jquery.js", "js/main.js"]
+    }
+  ],
+
+  "background": {
+    "scripts": ["js/libs/jquery.js", "js/background.js"]
+  },
+
+  "web_accessible_resources": [
+    "js/libs/jquery.js",
+    "js/libs/jquery.js",
+    "js/main.js",
+    "styles/main.css"
+  ]
+}
