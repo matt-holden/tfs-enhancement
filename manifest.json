@@ -25,7 +25,7 @@
 
   "content_scripts": [
     {
-      "matches": ["http://tfs:8080/tfs/*"],
+      "matches": ["http://tfs:8080/tfs/*", "https://*/tfs/*"],
       "css": ["styles/main.css"],
       "js": ["js/libs/jquery.js", "js/main.js"]
     }

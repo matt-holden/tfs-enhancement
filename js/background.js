@@ -56,7 +56,7 @@ var App = {
 
   sendMessage: function(method, callback, key) {
     chrome.tabs.query({active: true}, function(tab) {
-      if(/tfs:8080/.test(tab[0].url)) {
+      if(/tfs:8080/.test(tab[0].url) || /tfs.mindbodyonline.com/.test(tab[0].url)) {
         chrome.tabs.sendMessage(tab[0].id, method, function(response) {
           callback(response[key]);
         });
