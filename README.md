@@ -14,7 +14,8 @@ Click on the new TFS icon in your browser, currenty there are two options availa
 #### Board Enhancements
 These options will only affect the TFS board.
 
-| Option                | Description                  |
-|:----------------------|:-----------------------------|
-| Show work item Id's   | Display Id on the task card. |
-| Enable Id copying     | Right click card to copy Id. |
+| Option                | Description                                                    |
+|:----------------------|:---------------------------------------------------------------|
+| Show work item Id's   | Display Id on the task card.                                   |
+| Enable Id copying     | Right click card to copy Id.                                   |
+| Enable Auto Refresh   | Refresh the page at the interval you specify, in milliseconds. |

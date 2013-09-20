@@ -9,17 +9,20 @@ var Settings = {
   },
 
   delegateEvents: function() {
-    this.addSaveListener("#show-ids", "showIds");
-    this.addSaveListener("#copy-ids", "copyIds");
+    this.addSaveListener("#show-ids", "showIds", "change");
+    this.addSaveListener("#copy-ids", "copyIds", "change");
+    this.addSaveListener("#copy-ids", "copyIds", "change");
+    this.addSaveListener("#auto-refresh", "autoRefresh", "change");
+    this.addSaveListener("#auto-refresh-time", "autoRefreshTime", "keyup");
     this.loadUserSettings();
   },
 
-  addSaveListener: function(elem, key) {
+  addSaveListener: function(elem, key, event) {
     var $elem = $(elem),
         storage = chrome.storage.local;
 
-    $elem.on("change", this, function() {
-      var val = $(this).is(":checked"),
+    $elem.on(event, this, function(e) {
+      var val = e.target.type === "checkbox" ? $(this).is(":checked") : $(this).val(),
           jsonKey = key;
 
       localStorage[jsonKey] = val;
@@ -30,6 +33,8 @@ var Settings = {
   loadUserSettings: function() {
     if(this.userSettings.showIds === "true") $("input[name='showIds']").prop("checked", true);
     if(this.userSettings.copyIds === "true") $("input[name='copyIds']").prop("checked", true);
+    if(this.userSettings.autoRefresh === "true") $("input[name='autoRefresh']").prop("checked", true);
+    if(this.userSettings.autoRefreshTime) $("input[name='autoRefreshTime']").val(this.userSettings.autoRefreshTime);
   },
 
   getAllUserSettings: function() {

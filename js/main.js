@@ -15,6 +15,9 @@ var App = {
       this.trackCurrentElement();
     }
 
+    if(App.userSettings.autoRefresh === "true" && App.userSettings.autoRefreshTime) {
+      this.initAutoRefresh(App.userSettings.autoRefreshTime);
+    }
     this.initBackgroundCommunications();
   },
 
@@ -61,5 +64,9 @@ var App = {
       App.userSettings = response;
       App.delegateEvents();
     });
+  },
+
+  initAutoRefresh: function(interval) {
+    setTimeout(function() { window.location.reload(); }, interval);
   }
 };
