@@ -16,6 +16,6 @@ These options will only affect the TFS board.
 
 | Option                | Description                                                    |
 |:----------------------|:---------------------------------------------------------------|
-| Show work item Id's   | Display Id on the task card.                                   |
+| Show work item Id's   | Display Id on the task cards and next to the user story title. |
 | Enable Id copying     | Right click card to copy Id.                                   |
 | Enable Auto Refresh   | Refresh the page at the interval you specify, in milliseconds. |
