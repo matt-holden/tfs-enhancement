@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "TFS Portal tweaks",
-  "description": "Small tweaks to make the TFS portal better.",
+  "name": "TFS Enhamcement",
+  "description": "Small tweaks enhance the TFS web portal.",
   "version": "1.0",
   
   "permissions": [

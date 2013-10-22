@@ -11,6 +11,7 @@ var App = {
   delegateEvents: function() {
     if(App.userSettings.showIds === "true") {
       this.showTaskIds();
+      this.showUserStoryIds();
       this.updateCardsAfterClose();
       this.trackCurrentElement();
     }
@@ -32,6 +33,17 @@ var App = {
     });
   },
 
+  showUserStoryIds: function() {
+    var $userStories = $(".taskboard-parent[id*='taskboard']");
+
+    $userStories.each(function() {
+      var $this = $(this),
+          storyId = App.getUserStoryId($this);
+
+      if(!$this.find(".tfs-enhanced-id").length) $this.find(".witTitle ").prepend("<span class='tfs-enhanced-id'>" + storyId + ": </span>");
+    });
+  },
+
   updateCardsAfterClose: function() {
    var $taskCards = $(".tbTile");
 
@@ -42,13 +54,19 @@ var App = {
 
   initBackgroundCommunications: function() {
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      if(request == "getCurrentId") sendResponse({workItemId: App.getWorkItemId(App.curElement)});
+      if(request == "getCurrentId") {
+        if(/taskboard-parent/.test(App.curElement.prop("class"))) {
+          sendResponse({workItemId: App.getUserStoryId(App.curElement)});
+        } else {
+          sendResponse({workItemId: App.getWorkItemId(App.curElement)});
+        }
+      }
     });
   },
 
   trackCurrentElement: function() {
     $("body").on("mousedown", this, function(e) {
-      App.curElement = $(e.target).parents(".tbTile");
+      App.curElement = $(e.target).parents(".taskboard-parent").length ? $(e.target).parents(".taskboard-parent") : $(e.target).parents(".tbTile");
     });
   },
 
@@ -57,6 +75,13 @@ var App = {
         taskId = taskIdText.slice(taskIdText.indexOf("-") + 1, 10);
     
     return taskId;
+  },
+
+  getUserStoryId: function($userStory) {
+    var storyIdText = $userStory.prop("id"),
+        storyId = storyIdText.slice(storyIdText.indexOf("p") + 1, 23);
+
+    return storyId;
   },
 
   getUserSettings: function() {
