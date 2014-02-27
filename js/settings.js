@@ -14,6 +14,7 @@ var Settings = {
     this.addSaveListener("#copy-ids", "copyIds", "change");
     this.addSaveListener("#auto-refresh", "autoRefresh", "change");
     this.addSaveListener("#auto-refresh-time", "autoRefreshTime", "keyup");
+    this.addSaveListener("#enable-link", "enableLink", "change");
     this.loadUserSettings();
   },
 
@@ -35,6 +36,7 @@ var Settings = {
     if(this.userSettings.copyIds === "true") $("input[name='copyIds']").prop("checked", true);
     if(this.userSettings.autoRefresh === "true") $("input[name='autoRefresh']").prop("checked", true);
     if(this.userSettings.autoRefreshTime) $("input[name='autoRefreshTime']").val(this.userSettings.autoRefreshTime);
+    if(this.userSettings.enableLink === "true") $("input[name='enableLink']").prop("checked", true);
   },
 
   getAllUserSettings: function() {

@@ -19,6 +19,11 @@ var App = {
     if(App.userSettings.autoRefresh === "true" && App.userSettings.autoRefreshTime) {
       this.initAutoRefresh(App.userSettings.autoRefreshTime);
     }
+
+    if(App.userSettings.enableLink === "true") {
+      this.attachOverlay();
+    }
+
     this.initBackgroundCommunications();
   },
 
@@ -49,6 +54,10 @@ var App = {
 
    $taskCards.on("focus", this, function() {
       App.showTaskIds();
+      
+      if(App.userSettings.enableLink === "true") { 
+        App.attachOverlay();
+      }
    });
   },
 
@@ -93,5 +102,31 @@ var App = {
 
   initAutoRefresh: function(interval) {
     setTimeout(function() { window.location.reload(); }, interval);
+  },
+
+  attachOverlay: function() {
+    var $taskCards = $('.tbTile');
+
+    $taskCards.each(function(){
+      var $this = $(this),
+          $thisContent = $this.find('.tbTileContent'),
+          myID = $this.attr('id').split('-')[1];
+      $this.attr('title', myID);
+    });
+
+    $taskCards.on("mouseover", this, function() {
+      var $this = $(this),
+          myID = $this.attr('title'),
+          $myDiv = $(this).find('.JPS-QuickLink');
+      if(!$myDiv || $myDiv.length === 0) {
+        $this.append('<div class="JPS-QuickLink" style="position:relative; top:-80px; left:10px; width:50px; padding:0 4px; z-index:1000; background-color:white; box-shadow: 0px 1px 10px 1px gray; border-radius:2px;"><a href="http://tfssrv0101:8080/tfs/MBCollection/mb/_workitems#_a=edit&id=' + myID + '" target="_blank">' + myID + '</a></div>');
+      }
+    });
+
+    $taskCards.on("mouseout", this, function(e) {
+      var $myDiv = $(this).find('.JPS-QuickLink');
+      if($myDiv.is(':hover') === false) $myDiv.remove();
+    });
   }
+
 };
