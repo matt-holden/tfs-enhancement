@@ -55,7 +55,7 @@ var App = {
    $taskCards.on("focus", this, function() {
       App.showTaskIds();
       
-      if(App.userSettings.enableLink === "true") { 
+      if(App.userSettings.enableLink === "true") {
         App.attachOverlay();
       }
    });
