@@ -33,7 +33,7 @@ body {
 }
 
 .main-header h3 {
-  margin: 0;
+  margin: 2px 0 0 0;
   font-size: 12px;
   font-weight: normal;
   float: right;
