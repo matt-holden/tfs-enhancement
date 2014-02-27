@@ -5,7 +5,7 @@ A chrome extension to add simple enhancements to the TFS web portal.
 ### Installation
 ---
 
-Download the `chrome-tfs.crx` file, navigate to the extensions pane in chrome (you can also paste `chrome://extensions/` into your address bar), then drag and drop the `chrome-tfs.crx` into the extensions pane. To download `chrome-tfs.crx` from this repo, [click here](https://github.com/jonlunsford/chrome-tfs/raw/master/chrome-tfs.crx).
+Download the `chrome-tfs.crx` file, navigate to the extensions pane in chrome (you can also paste `chrome://extensions/` into your address bar), then drag and drop the `chrome-tfs.crx` into the extensions pane. To download `chrome-tfs.crx` from this repo, [click here](https://github.com/jonlunsford/chrome-tfs/raw/master/chrome-tfs.crx). Be sure you are using Chrome to download this file.
 
 ### Usage
 ---
