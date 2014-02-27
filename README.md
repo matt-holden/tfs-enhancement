@@ -9,7 +9,7 @@ Using Chrome, [click here](https://github.com/jonlunsford/chrome-tfs/raw/master/
 
 ### Usage
 ---
-Click on the new TFS icon in your browser, currenty there are two options available.
+Click on the new TFS icon in your browser, currenty there are four options available. The TFS portal MUST be refreshed for the settings to take effect.
 
 #### Board Enhancements
 These options will only affect the TFS board.
