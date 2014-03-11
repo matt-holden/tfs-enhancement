@@ -21,8 +21,20 @@ These options will only affect the TFS board.
 | Enable ID link        | Makes the work item ID a link on hover, clicking it will open the work item in a new tab.  |
 | Enable Auto Refresh   | Refresh the page at the interval you specify, in milliseconds.                             |
 
+### Changelog
+---
+
+- **Version 1.1:** Added copy work item title, minor bug fixes
+- **Version 1.0:** Initial Release
+
+### Contributers
+---
+
+- [@matt-holden](https://github.com/matt-holden)
+
 ### Contributing
 ---
+
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
