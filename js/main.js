@@ -101,7 +101,17 @@ var App = {
   },
 
   initAutoRefresh: function(interval) {
-    setTimeout(function() { window.location.reload(); }, interval);
+    setTimeout(App.refreshPageIfSafe, interval);
+  },
+
+  refreshPageIfSafe: function() {
+    // A .workitem-dialog div exists while a user-input popover is presented.
+    if ($('div.workitem-dialog').length) {
+      var retryTimeout = 5 * 1000;
+      setTimeout(App.refreshPageIfSafe, retryTimeout);
+    } else {
+      window.location.reload();
+    }
   },
 
   attachOverlay: function() {
