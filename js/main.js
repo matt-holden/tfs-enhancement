@@ -70,6 +70,13 @@ var App = {
           sendResponse({workItemId: App.getWorkItemId(App.curElement)});
         }
       }
+      else if (request == "getCurrentTitle") {
+          if (/taskboard-parent/.test(App.curElement.prop("class"))) {
+              sendResponse({ workItemTitle: App.getUserStoryTitle(App.curElement) });
+          } else {
+              sendResponse({ workItemTitle: App.getWorkItemTitle(App.curElement) });
+          }
+      }
     });
   },
 
@@ -91,6 +98,20 @@ var App = {
         storyId = storyIdText.slice(storyIdText.indexOf("p") + 1, 23);
 
     return storyId;
+  },
+
+  getWorkItemTitle: function ($workItem) {
+      var itemBackgroundColor = $workItem.find('.tbTileContent').css("backgroundColor"),
+          itemType = ((itemBackgroundColor == "rgb(230, 244, 220)") ? "Bug " : (itemBackgroundColor == "rgb(212, 220, 246)") ? "Task " : "? "),
+          itemTitle = itemType + $workItem.find('.witTitle').text();
+      
+      return itemTitle;
+  },
+
+  getUserStoryTitle: function ($userStory) {
+      var storyTitle = "User Story " + $userStory.find('.witTitle').text();
+
+      return storyTitle;
   },
 
   getUserSettings: function() {
@@ -127,10 +148,18 @@ var App = {
     $taskCards.on("mouseover", this, function() {
       var $this = $(this),
           myID = $this.attr('title'),
-          $myDiv = $(this).find('.JPS-QuickLink');
-      if(!$myDiv || $myDiv.length === 0) {
-        $this.append('<div class="JPS-QuickLink" style="position:relative; top:-80px; left:10px; width:50px; padding:0 4px; z-index:1000; background-color:white; box-shadow: 0px 1px 10px 1px gray; border-radius:2px;"><a href="http://tfssrv0101:8080/tfs/MBCollection/mb/_workitems#_a=edit&id=' + myID + '" target="_blank">' + myID + '</a></div>');
+          $myDiv = $this.find('.JPS-QuickLink');
+
+      if (!$myDiv || $myDiv.length === 0) {
+        var copyTitleOnRightClick = 'title = "' + App.getWorkItemTitle($this) + '" ';
+        $this.append('<div class="JPS-QuickLink" style="position:relative; top:-80px; left:10px; width:50px; padding:0 4px; z-index:1000; background-color:white; box-shadow: 0px 1px 10px 1px gray; border-radius:2px;"><a class="copyWorkItemTitle" href="http://tfssrv0101:8080/tfs/MBCollection/mb/_workitems#_a=edit&id=' + myID + '" ' + copyTitleOnRightClick + ' target="_blank">' + myID + '</a></div>');
       }
+    });
+
+    $(".copyWorkItemTitle").on("contextmenu", this, function () {
+      var myTitle = $(this).attr('title');
+      chrome.runtime.sendMessage({method: "copyToClipboard", text:myTitle});
+      return false;
     });
 
     $taskCards.on("mouseout", this, function(e) {

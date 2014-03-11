@@ -10,6 +10,7 @@ var App = {
 
   delegateEvents: function() {
     this.sendUserSettings();
+    this.receiveCopyToClipboard();
     this.buildContextMenu();
   },
 
@@ -21,6 +22,14 @@ var App = {
         App.buildContextMenu();
       }
     });
+  },
+
+  receiveCopyToClipboard: function () {
+      chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
+          if (message.method == 'copyToClipboard') {
+              App.copyToClipboard(message.text);
+          }
+      });
   },
 
   getAllUserSettings: function() {
@@ -36,11 +45,16 @@ var App = {
 
   buildContextMenu: function() {
     var settings = App.getAllUserSettings();
-    if(settings.copyIds === "true") chrome.contextMenus.create({"title": "Copy work item ID", "onclick":App.copyWorkId});
+    if (settings.copyIds === "true") chrome.contextMenus.create({ "title": "Copy work item ID", "onclick": App.copyWorkId });
+    chrome.contextMenus.create({ "title": "Copy work item title", "onclick": App.copyWorkTitle });
   },
 
   copyWorkId: function() {
     App.sendMessage("getCurrentId", App.copyToClipboard, "workItemId");
+  },
+
+  copyWorkTitle: function () {
+    App.sendMessage("getCurrentTitle", App.copyToClipboard, "workItemTitle");
   },
 
   copyToClipboard: function(text) {
