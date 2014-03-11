@@ -27,7 +27,7 @@ These options will only affect the TFS board.
 - **Version 1.1:** Added copy work item title, minor bug fixes
 - **Version 1.0:** Initial Release
 
-### Contributers
+### Contributors
 ---
 
 - [@matt-holden](https://github.com/matt-holden)
