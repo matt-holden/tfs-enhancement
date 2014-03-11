@@ -25,7 +25,7 @@
 
   "content_scripts": [
     {
-      "matches": ["http://tfs:8080/tfs/*TaskBoard*", "https://*/tfs/*TaskBoard*"],
+      "matches": ["http://tfs:8080/tfs/*TaskBoard*", "https://*/tfs/*TaskBoard*", "http://tfs:8080/tfs/*taskboard*", "https://*/tfs/*taskboard*"],
       "css": ["styles/main.css"],
       "js": ["js/libs/jquery.js", "js/main.js"]
     }
