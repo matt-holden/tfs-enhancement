@@ -7,6 +7,12 @@ A chrome extension to add simple enhancements to the TFS web portal.
 
 Using Chrome, [click here](https://github.com/jonlunsford/chrome-tfs/blob/master/chrome-tfs.crx?raw=true) to download the `chrome-tfs.crx` file, navigate to the extensions pane in Chrome (you can also paste `chrome://extensions/` into your address bar), then drag and drop the `chrome-tfs.crx` file into the extensions pane.
 
+
+### Updating
+
+It auto-updates.
+
+
 ### Usage
 ---
 Click on the new TFS icon in your browser, enable the settings you would like. The TFS portal MUST be refreshed for the settings to take effect.
@@ -24,6 +30,7 @@ These options will only affect the TFS board.
 ### Changelog
 ---
 
+- **Version 1.3:** Adds support for extension auto-updating
 - **Version 1.2:** Scroll position is now preserved when autorefresh is enabled
 - **Version 1.1:** Added copy work item title, minor bug fixes
 - **Version 1.0:** Initial Release
