@@ -30,6 +30,7 @@ These options will only affect the TFS board.
 ### Changelog
 ---
 
+- **Version 1.3.1:** New extensions pane logo
 - **Version 1.3:** Adds support for extension auto-updating
 - **Version 1.2:** Scroll position is now preserved when autorefresh is enabled
 - **Version 1.1:** Added copy work item title, minor bug fixes
