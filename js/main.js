@@ -24,6 +24,10 @@ var App = {
       this.attachOverlay();
     }
 
+    this.initSessionTracking();
+    this.initScrollTopOffsetTracking();
+    this.scrollToStoredScrollTopOffset();
+
     this.initBackgroundCommunications();
   },
 
@@ -166,6 +170,42 @@ var App = {
       var $myDiv = $(this).find('.JPS-QuickLink');
       if($myDiv.is(':hover') === false) $myDiv.remove();
     });
+  },
+
+  initSessionTracking: function() {
+    var kSessionFragment = "extensionSession=1";
+    var currentHash = window.location.hash;
+    var activeSessionRegExp = new RegExp(kSessionFragment);
+
+    // Nothing to do, we're mid-sesison
+    if (currentHash.match(activeSessionRegExp))
+        return;
+
+    // New session
+    delete localStorage.lastScrollTopOffset;
+
+    var newHash = "";
+    if (currentHash.length === 0) {
+      newHash = kSessionFragment;
+    } else {
+      newHash = currentHash + "&" + kSessionFragment;
+    }
+
+    window.location.hash = newHash;
+  },
+
+  initScrollTopOffsetTracking: function() {
+    $('#taskboard').scroll(function() {
+      localStorage.lastScrollTopOffset = $('#taskboard').scrollTop();
+    });
+  r,
+
+  scrollToStoredScrollTopOffset: function() {
+    var offset = parseInt(localStorage.lastScrollTopOffset);
+
+    if (offset > 0) {
+      $('#taskboard').scrollTop(localStorage.lastScrollTopOffset);
+    }
   }
 
 };
