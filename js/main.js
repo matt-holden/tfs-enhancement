@@ -198,7 +198,7 @@ var App = {
     $('#taskboard').scroll(function() {
       localStorage.lastScrollTopOffset = $('#taskboard').scrollTop();
     });
-  r,
+  },
 
   scrollToStoredScrollTopOffset: function() {
     var offset = parseInt(localStorage.lastScrollTopOffset);
