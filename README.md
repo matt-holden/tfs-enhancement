@@ -24,6 +24,7 @@ These options will only affect the TFS board.
 ### Changelog
 ---
 
+- **Version 1.2:** Scroll position is now preserved with autorefresh is enabled
 - **Version 1.1:** Added copy work item title, minor bug fixes
 - **Version 1.0:** Initial Release
 
