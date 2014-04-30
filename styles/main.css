@@ -27,7 +27,7 @@ body.chrome-tfs {
 }
 
 .chrome-tfs .main-footer {
-  margin-top: 15px;
+  margin: 15px 0 2px 0;
   background: #F7F7F7;
   padding: 5px;
 }
