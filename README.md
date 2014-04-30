@@ -30,6 +30,7 @@ These options will only affect the TFS board.
 ### Changelog
 ---
 
+- **Version 1.3.2:** Bug fixes: styling conflicts with work item windows, allowing longer work item id's on the board, refactored active tab checking.  
 - **Version 1.3.1:** New extensions pane logo
 - **Version 1.3:** Adds support for extension auto-updating
 - **Version 1.2:** Scroll position is now preserved when autorefresh is enabled
@@ -40,6 +41,7 @@ These options will only affect the TFS board.
 ---
 
 - [@matt-holden](https://github.com/matt-holden)
+- [@SquareWave](https://github.com/SquareWave)
 
 ### Contributing
 ---
