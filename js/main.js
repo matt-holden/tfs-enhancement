@@ -92,7 +92,7 @@ var App = {
 
   getWorkItemId: function($workItem) {
     var taskIdText = $workItem.prop("id"),
-        taskId = taskIdText.slice(taskIdText.indexOf("-") + 1, 10);
+        taskId = taskIdText.slice(taskIdText.indexOf("-") + 1);
     
     return taskId;
   },
