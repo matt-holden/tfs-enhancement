@@ -23,7 +23,7 @@ var App = {
 
   checkTabChange: function() {
     chrome.tabs.onActivated.addListener(function(activeInfo) {
-      App.userSettings = App.getAllUserSettings(); // needs to be better...?
+      App.userSettings = App.getAllUserSettings();
       if (App.userSettings.tfsUrls) {
         chrome.tabs.get(activeInfo.tabId, function(tab) {
           debugger;
