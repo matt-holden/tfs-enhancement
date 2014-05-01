@@ -2,23 +2,53 @@ $(function() { App.init(); });
 
 var App = {
   userSettings: {},
-  
+
   init: function() {
     this.userSettings = App.getAllUserSettings();
-    this.delegateEvents();
+    this.checkTabChange();
+  },
+
+  validateTFSUrl: function(url) {
+    if (App.userSettings.tfsUrls) {
+      var arr = App.userSettings.tfsUrls.split(',');
+      var len = arr.length;
+      for (var i = 0; i < len; i++) {
+        var regex = new RegExp(arr[i]);
+        if (regex.test(url))
+          return true;
+      }
+    }
+    return false;
+  },
+
+  checkTabChange: function() {
+    chrome.tabs.onActivated.addListener(function(activeInfo) {
+      App.userSettings = App.getAllUserSettings(); // needs to be better...?
+      if (App.userSettings.tfsUrls) {
+        chrome.tabs.get(activeInfo.tabId, function(tab) {
+          debugger;
+          var tfs = App.validateTFSUrl(tab.url);
+          if (tfs) {
+            chrome.tabs.executeScript(activeInfo.tabId, { file: 'js/main.js' }, null);
+            App.delegateEvents();
+            App.buildContextMenu();
+          } else {
+            App.destroyContextMenu();
+          }
+        });
+      }
+    });
   },
 
   delegateEvents: function() {
     this.sendUserSettings();
     this.receiveCopyToClipboard();
-    this.buildContextMenu();
   },
 
   sendUserSettings: function() {
-    chrome.runtime.onMessage.addListener( function (message,sender,sendResponse) {
+    chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
       if(message.method == 'getUserSettings') {
         sendResponse(App.getAllUserSettings());
-        chrome.contextMenus.removeAll();
         App.buildContextMenu();
       }
     });
@@ -44,9 +74,14 @@ var App = {
   },
 
   buildContextMenu: function() {
+    App.destroyContextMenu();
     var settings = App.getAllUserSettings();
     if (settings.copyIds === "true") chrome.contextMenus.create({ "title": "Copy work item ID", "onclick": App.copyWorkId });
     chrome.contextMenus.create({ "title": "Copy work item title", "onclick": App.copyWorkTitle });
+  },
+
+  destroyContextMenu: function() {
+    chrome.contextMenus.removeAll();
   },
 
   copyWorkId: function() {
@@ -70,7 +105,8 @@ var App = {
 
   sendMessage: function(method, callback, key) {
     chrome.tabs.query({active: true}, function(tab) {
-      if(/tfs:8080/.test(tab[0].url) || /tfs.mindbodyonline.com/.test(tab[0].url)) {
+      var tfs = App.validateTFSUrl(tab[0].url);
+      if(tfs) {
         chrome.tabs.sendMessage(tab[0].id, method, function(response) {
           callback(response[key]);
         });
