@@ -5,106 +5,106 @@
   box-sizing: border-box;
 }
 
-body.chrome-tfs {
+body {
   font-size: 12px;
   color: #333;
 }
 
-.chrome-tfs .main-wrap {
+.main-wrap {
   width: 500px;
   height: auto;
 }
 
-.chrome-tfs .main-header {
+.main-header {
   color: #fff;
   background: #007acc;
-  overflow: hidden; 
+  overflow: hidden;
   padding: 5px;
 }
 
-.chrome-tfs .main-header {
+.main-header {
   margin-bottom: 15px;
 }
 
-.chrome-tfs .main-footer {
+.main-footer {
   margin: 15px 0 2px 0;
   background: #F7F7F7;
   padding: 5px;
 }
 
-.chrome-tfs .main-header h3 {
+.main-header h3 {
   margin: 2px 0 0 0;
   font-size: 12px;
   font-weight: normal;
   float: right;
 }
 
-.chrome-tfs .main-header img {
+.main-header img {
   display: block;
   float: left;
 }
 
-.chrome-tfs .content {
+.content {
   padding: 10px;
   background: #F7F7F7;
   border-radius: 5px;
   margin: 10px;
 }
 
-.chrome-tfs .content-header {
+.content-header {
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
 
-.chrome-tfs .content h4 {
+.content h4 {
   font-size: 14px;
   margin: 0 0 3px 0;
 }
 
-.chrome-tfs .sub-text {
+.sub-text {
   margin: 0;
   font-style: italic;
   color: #B8B8B8;
   font-size: 11px;
 }
 
-.chrome-tfs .settings-form {
+.settings-form {
   overflow: hidden;
 }
 
-.chrome-tfs .int-input {
+.int-input {
   width: 72px;
   margin-top: 4px;
 }
 
-.chrome-tfs .ul-reset {
+.ul-reset {
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
 
-.chrome-tfs .label-group {
+.label-group {
   width: 144px;
   float: left;
   margin-right: 10px;
   text-align: right;
 }
 
-.chrome-tfs .control-list {
+.control-list {
   float: left;
   width: 50%;
 }
 
-.chrome-tfs .control-list li {
+.control-list li {
   overflow: hidden;
   margin-bottom: 15px;
 }
 
-.chrome-tfs .control-list li:last-child {
+.control-list li:last-child {
   margin-bottom: 0;
 }
 
-.chrome-tfs .settings-form {
+.settings-form {
   margin: 20px 0 10px 0;
 }

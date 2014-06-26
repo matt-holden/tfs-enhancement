@@ -1,16 +1,16 @@
-# Chrome TFS 
+# TFS Enhancement
 
 A chrome extension to add simple enhancements to the TFS web portal.
 
 ### Installation
 ---
 
-Using Chrome, [click here](https://github.com/jonlunsford/chrome-tfs/blob/master/chrome-tfs.crx?raw=true) to download the `chrome-tfs.crx` file, navigate to the extensions pane in Chrome (you can also paste `chrome://extensions/` into your address bar), then drag and drop the `chrome-tfs.crx` file into the extensions pane.
+Using Chrome, [click here](https://github.com/jonlunsford/tfs-enhancement/blob/master/tfs-enhancement.crx?raw=true) to download the `tfs-enhancement.crx` file, navigate to the extensions pane in Chrome (you can also paste `chrome://extensions/` into your address bar), then drag and drop the `tfs-enhancement.crx` file into the extensions pane.
 
 
 ### Updating
 
-It auto-updates.
+Soon to be auto updating from the web store.
 
 
 ### Usage
@@ -30,7 +30,8 @@ These options will only affect the TFS board.
 ### Changelog
 ---
 
-- **Version 1.3.2:** Bug fixes: styling conflicts, longer work item id's, and active tab checking.  
+- **Version 1.3.3:** Rename extension to comply with Google branding guidelines.
+- **Version 1.3.2:** Bug fixes: styling conflicts, longer work item id's, and active tab checking.
 - **Version 1.3.1:** New extensions pane logo
 - **Version 1.3:** Adds support for extension auto-updating
 - **Version 1.2:** Scroll position is now preserved when autorefresh is enabled
