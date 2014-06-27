@@ -30,6 +30,7 @@ These options will only affect the TFS board.
 ### Changelog
 ---
 
+- **Version 1.3.4:** Version bump. Remove css from content assets.
 - **Version 1.3.3:** Rename extension to comply with Google branding guidelines.
 - **Version 1.3.2:** Bug fixes: styling conflicts, longer work item id's, and active tab checking.
 - **Version 1.3.1:** New extensions pane logo
