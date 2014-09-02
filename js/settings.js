@@ -10,6 +10,7 @@ var Settings = {
 
   delegateEvents: function() {
     this.addSaveListener("#show-ids", "showIds", "change");
+    this.addSaveListener("#skip-to-dev-cycle-notes", "skipToDevCycleNotes", "change");
     this.addSaveListener("#copy-ids", "copyIds", "change");
     this.addSaveListener("#copy-ids", "copyIds", "change");
     this.addSaveListener("#auto-refresh", "autoRefresh", "change");
@@ -33,6 +34,7 @@ var Settings = {
   // Need to refactor for a better programatic way of doing this.
   loadUserSettings: function() {
     if(this.userSettings.showIds === "true") $("input[name='showIds']").prop("checked", true);
+    if(this.userSettings.skipToDevCycleNotes === "true") $("input[name='skipToDevCycleNotes']").prop("checked", true);
     if(this.userSettings.copyIds === "true") $("input[name='copyIds']").prop("checked", true);
     if(this.userSettings.autoRefresh === "true") $("input[name='autoRefresh']").prop("checked", true);
     if(this.userSettings.autoRefreshTime) $("input[name='autoRefreshTime']").val(this.userSettings.autoRefreshTime);

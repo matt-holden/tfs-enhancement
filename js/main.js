@@ -3,6 +3,11 @@ $(function() { App.init(); });
 var App = {
   curElement: "",
   userSettings: {},
+  workItemModalAppearanceEventListeners: {
+    'show' : [],
+    'hide' : []
+  },
+
   
   init: function() {
     this.getUserSettings();
@@ -22,6 +27,12 @@ var App = {
 
     if(App.userSettings.enableLink === "true") {
       this.attachOverlay();
+    }
+
+    this.initWorkItemModalWatcher();
+
+    if(App.userSettings.skipToDevCycleNotes === "true") {
+      this.initSkipToDevCycleNotes();
     }
 
     this.initSessionTracking();
@@ -199,6 +210,59 @@ var App = {
       localStorage.lastScrollTopOffset = $('#taskboard').scrollTop();
     });
   },
+
+  initWorkItemModalWatcher: function() {
+    var that = this;
+
+    var lastValue = null;
+    var checkVisibility = function () {
+
+      // Using querySelector() stops the DOM traversal the moment
+      // the first match is found, rather than seeking multiple matches on
+      // for the selector.
+      // By looking for the child element 'table.witform-layout', we are waiting until
+      // the modal content's have loaded (via AJAX) before invoking callback handlers.
+      var modalElement = document.querySelector('div.workitem-dialog table.witform-layout');
+      var visible = !! modalElement;
+
+      if (visible !== lastValue) {
+        lastValue = visible;
+
+        var eventName = visible ? "show" : "hide";
+        var fns = that.workItemModalAppearanceEventListeners[eventName];
+        setTimeout(function (){
+          for (var i = 0, len = fns.length; i < len; i++) {
+              fns[i].call(that, modalElement);
+          }
+        }, 0);
+      }
+    };
+    setInterval(function () {
+      checkVisibility()
+    }, 20);
+  },
+
+  initSkipToDevCycleNotes: function () {
+    if(App.userSettings.skipToDevCycleNotes === "true") {
+      this.addWorkItemModalAppearanceEventListener("show", function (modalElement) {
+        $('a[rawtitle="Dev Cycle Notes"]')[0].click();
+        setTimeout(function(){
+          // Scroll to bottom of cycle notes... sexily.
+          var scrollingArea = $('.work-item-view');
+          if (scrollingArea.length) { // sanity check
+            scrollingArea.animate({ scrollTop: scrollingArea[0].scrollHeight}, 1000);
+          }
+        }, 0);
+      });
+    }
+  },
+
+  // Events are "show", "hide"
+  // Callbacks will be executed in the context of this object
+  addWorkItemModalAppearanceEventListener: function (evt, callback) {
+    this.workItemModalAppearanceEventListeners[evt].push(callback);
+  },
+
 
   scrollToStoredScrollTopOffset: function() {
     var offset = parseInt(localStorage.lastScrollTopOffset);
