@@ -20,12 +20,14 @@ Click on the new TFS icon in your browser, enable the settings you would like. T
 #### Board Enhancements
 These options will only affect the TFS board.
 
-| Option                | Description                                                                                |
-|:----------------------|:-------------------------------------------------------------------------------------------|
-| Show work item ID's   | Display ID on the task cards and next to the user story title.                             |
-| Enable ID copying     | Right click card or user story to copy ID.                                                 |
-| Enable ID link        | Makes the work item ID a link on hover, clicking it will open the work item in a new tab.  |
-| Enable Auto Refresh   | Refresh the page at the interval you specify, in milliseconds.                             |
+| Option                    | Description
+|:--------------------------|:-------------------------------------------------------------------------------------------------------
+| Show work item ID's       | Display ID on the task cards and next to the user story title.
+| Enable ID copying         | Right click card or user story to copy ID.
+| Enable ID link            | Makes the work item ID a link on hover, clicking it will open the work item in a new tab.
+| Enable Auto Refresh       | Refresh the page at the interval you specify, in milliseconds.
+| Skip To Dev Cycle Notes   | When you open a task / bug the "dev cycle notes" will be selected and scrolled to automatically
+| Highlight My Tasks & Bugs | Enter your name as it appears on each task, select a color, and your tasks & bugs will be highlighted
 
 ### Changelog
 ---
