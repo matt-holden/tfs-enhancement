@@ -78,6 +78,14 @@ body {
   margin-top: 4px;
 }
 
+#name-highlight-text-input {
+  width: 150px;
+}
+
+#name-highlight-controls-row {
+  margin-top: 2px;
+}
+
 .ul-reset {
   padding: 0;
   margin: 0;

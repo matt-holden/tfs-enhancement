@@ -3,6 +3,12 @@ $(function() { App.init(); });
 var App = {
   curElement: "",
   userSettings: {},
+  workItemModalAppearanceEventListeners: {
+    'show' : [],
+    'hide' : []
+  },
+  rgbRegExp: /rgb\((\d+),(\d+),(\d+)\)/, //Caching this regexp for performance
+
   
   init: function() {
     this.getUserSettings();
@@ -22,6 +28,18 @@ var App = {
 
     if(App.userSettings.enableLink === "true") {
       this.attachOverlay();
+    }
+
+    this.initWorkItemModalWatcher();
+
+    if(App.userSettings.skipToDevCycleNotes === "true") {
+      this.initSkipToDevCycleNotes();
+    }
+
+    if(App.userSettings.enableNameHighlight === "true"
+      && App.userSettings.nameHighlightUsername !== undefined
+      && App.userSettings.nameHighlightColor !== undefined) {
+      this.initNameHighlighting();
     }
 
     this.initSessionTracking();
@@ -200,12 +218,149 @@ var App = {
     });
   },
 
+  initWorkItemModalWatcher: function() {
+    var that = this;
+
+    var lastValue = null;
+    var checkVisibility = function () {
+
+      // Using querySelector() stops the DOM traversal the moment
+      // the first match is found, rather than seeking multiple matches on
+      // for the selector.
+      // By looking for the child element 'table.witform-layout', we are waiting until
+      // the modal content's have loaded (via AJAX) before invoking callback handlers.
+      var modalElement = document.querySelector('div.workitem-dialog table.witform-layout');
+      var visible = !! modalElement;
+
+      if (visible !== lastValue) {
+        lastValue = visible;
+
+        var eventName = visible ? "show" : "hide";
+        var fns = that.workItemModalAppearanceEventListeners[eventName];
+        setTimeout(function (){
+          for (var i = 0, len = fns.length; i < len; i++) {
+              fns[i].call(that, modalElement);
+          }
+        }, 0);
+      }
+    };
+    setInterval(function () {
+      checkVisibility()
+    }, 20);
+  },
+
+  initSkipToDevCycleNotes: function () {
+    if(App.userSettings.skipToDevCycleNotes === "true") {
+      this.addWorkItemModalAppearanceEventListener("show", function (modalElement) {
+        $('a[rawtitle="Dev Cycle Notes"]')[0].click();
+        setTimeout(function(){
+          // Scroll to bottom of cycle notes... sexily.
+          var scrollingArea = $('.work-item-view');
+          if (scrollingArea.length) { // sanity check
+            scrollingArea.animate({ scrollTop: scrollingArea[0].scrollHeight}, 1000);
+          }
+        }, 0);
+      });
+    }
+  },
+
+  initNameHighlighting: function () {
+    var iRef; // timer interval reference
+
+    // Check for coloring whenever the assignee is edited
+    $('#taskboard').on('DOMSubtreeModified', 'div.tbTile .tbTileContent .witAssignedTo', function (evt) {
+      var tile = $(this).parents('.tbTileContent')[0];
+      // The stuff that TFS does to the DOM is very wonky and hard to figure out,
+      // so we're just gonna re-apply colorization across the board every 3 seconds
+      // for 12 seconds (to make sure the AJAX save has finished and the DOM is
+      // back in sound state)
+      // It's very scientific....
+      if (iRef) clearInterval(iRef);
+
+      setTimeout(function(){
+        clearInterval(iRef);
+      }, 12000);
+
+      iRef = setInterval(function(){
+        App.applyNameHighlightingForAllTiles();
+      }, 3000);
+
+    });
+
+    App.applyNameHighlightingForAllTiles();
+  },
+
+  applyNameHighlightingForAllTiles: function () {
+    // Iterate through all tiles, store their current color values,
+    // and apply highllighting whenever matches occur
+    var allTiles = $('#taskboard-table div.tbTile .tbTileContent').each(function(i, el){
+      // First store current background-color and border-left-color values
+      var $el = $(el);
+      $el.data('originalBackgroundColor', el.style.backgroundColor);
+      $el.data('originalBorderLeftColor', el.style.borderLeftColor);
+      $el.find('.witAssignedTo').data('originalAssigneeTextColor', el.style.borderLeftColor);
+
+      // Apply name highlighting to matches
+      App.toggleNameHighlightingForTile(el);
+    });
+  },
+
+  toggleNameHighlightingForTile: function (tile) {
+
+    var username = App.userSettings.nameHighlightUsername;
+    var userColor = App.userSettings.nameHighlightColor;
+    var regExp = new RegExp(username);
+    var assigneeEl = $('.witAssignedTo .onTileEditTextDiv', tile).get(0);
+
+    var isUserMatch = assigneeEl && regExp.test(assigneeEl.textContent);
+    if (isUserMatch && userColor && (colorMatch = userColor.match(App.rgbRegExp))) {
+      tile.style.backgroundColor = userColor;
+      tile.style.borderLeftColor = App.util.rgbOffsetBy(userColor, -20);
+      assigneeEl.style.color = App.util.rgbOffsetBy(userColor, -110);
+      $(assigneeEl).data('hasHighlightModifications', true);
+    }
+    else if ($(assigneeEl).data('hasHighlightModifications') === true) {
+      tile.style.borderLeftColor = $(tile).data('originalBorderLeftColor');
+      tile.style.backgroundColor = $(tile).data('originalBackgroundColor');
+
+      if (assigneeEl)
+        assigneeEl.style.color = $(tile).data('originalAssigneeTextColor');
+
+      $(assigneeEl).data('hasHighlightModifications', false);
+    } else {
+    console.log('nada');
+    }
+  },
+
+  // Events are "show", "hide"
+  // Callbacks will be executed in the context of this object
+  addWorkItemModalAppearanceEventListener: function (evt, callback) {
+    this.workItemModalAppearanceEventListeners[evt].push(callback);
+  },
+
+
   scrollToStoredScrollTopOffset: function() {
     var offset = parseInt(localStorage.lastScrollTopOffset);
 
     if (offset > 0) {
       $('#taskboard').scrollTop(localStorage.lastScrollTopOffset);
     }
-  }
+  },
 
+  util: {
+    // Utility method for my bad understanding of color math
+    rgbOffsetBy : function (color, offset) {
+      var colorMatch = color.match(App.rgbRegExp);
+      if (!colorMatch) {
+        throw "color: " + color + " ain't no color";
+        return;
+      }
+      var colorParts = [
+        parseInt(colorMatch[1]) + offset,
+        parseInt(colorMatch[2]) + offset,
+        parseInt(colorMatch[3]) + offset
+      ];
+      return 'rgb(' + colorParts.join(',') + ')';
+    }
+  }
 };
