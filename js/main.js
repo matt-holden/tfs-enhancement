@@ -9,7 +9,7 @@ var App = {
   },
   rgbRegExp: /rgb\((\d+),(\d+),(\d+)\)/, //Caching this regexp for performance
 
-  
+
   init: function() {
     this.getUserSettings();
   },
@@ -36,9 +36,7 @@ var App = {
       this.initSkipToDevCycleNotes();
     }
 
-    if(App.userSettings.enableNameHighlight === "true"
-      && App.userSettings.nameHighlightUsername !== undefined
-      && App.userSettings.nameHighlightColor !== undefined) {
+    if(App.userSettings.enableNameHighlight === "true" && App.userSettings.nameHighlightUsername !== undefined && App.userSettings.nameHighlightColor !== undefined) {
       this.initNameHighlighting();
     }
 
@@ -51,7 +49,7 @@ var App = {
 
   showTaskIds: function() {
     var $taskCards = $(".tbTile");
-    
+
     $taskCards.each(function() {
       var $this = $(this),
           taskId = App.getWorkItemId($this);
@@ -76,7 +74,7 @@ var App = {
 
    $taskCards.on("focus", this, function() {
       App.showTaskIds();
-      
+
       if(App.userSettings.enableLink === "true") {
         App.attachOverlay();
       }
@@ -111,7 +109,7 @@ var App = {
   getWorkItemId: function($workItem) {
     var taskIdText = $workItem.prop("id"),
         taskId = taskIdText.slice(taskIdText.indexOf("-") + 1);
-    
+
     return taskId;
   },
 
@@ -126,7 +124,7 @@ var App = {
       var itemBackgroundColor = $workItem.find('.tbTileContent').css("backgroundColor"),
           itemType = ((itemBackgroundColor == "rgb(230, 244, 220)") ? "Bug " : (itemBackgroundColor == "rgb(212, 220, 246)") ? "Task " : "? "),
           itemTitle = itemType + $workItem.find('.witTitle').text();
-      
+
       return itemTitle;
   },
 
@@ -245,7 +243,7 @@ var App = {
       }
     };
     setInterval(function () {
-      checkVisibility()
+      checkVisibility();
     }, 20);
   },
 
@@ -327,8 +325,6 @@ var App = {
         assigneeEl.style.color = $(tile).data('originalAssigneeTextColor');
 
       $(assigneeEl).data('hasHighlightModifications', false);
-    } else {
-    console.log('nada');
     }
   },
 
@@ -353,7 +349,6 @@ var App = {
       var colorMatch = color.match(App.rgbRegExp);
       if (!colorMatch) {
         throw "color: " + color + " ain't no color";
-        return;
       }
       var colorParts = [
         parseInt(colorMatch[1]) + offset,
