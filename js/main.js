@@ -7,7 +7,7 @@ var App = {
     'show' : [],
     'hide' : []
   },
-  rgbRegExp: /rgb\((\d+),(\d+),(\d+)\)/, //Caching this regexp for performance
+  rgbRegExp: /rgb\((\d+), ?(\d+), ?(\d+)\)/, //Caching this regexp for performance
 
 
   init: function() {
@@ -39,6 +39,11 @@ var App = {
     if(App.userSettings.enableNameHighlight === "true" && App.userSettings.nameHighlightUsername !== undefined && App.userSettings.nameHighlightColor !== undefined) {
       this.initNameHighlighting();
     }
+
+    // To lazy to make an option for this feature. Everyone gets it.. huzzah!
+    var userColor = App.userSettings.nameHighlightColor;
+    console.log(userColor);
+    this.initBugPriorityHighlighting();
 
     this.initSessionTracking();
     this.initScrollTopOffsetTracking();
@@ -288,22 +293,59 @@ var App = {
     App.applyNameHighlightingForAllTiles();
   },
 
+  initBugPriorityHighlighting: function () {
+    var patternsAndColors = [
+      { "regExp": new RegExp("^P1[.: ].*", "i"), "color" : "rgb(255,150,150)" },
+      { "regExp": new RegExp("^P2[.: ].*", "i"), "color" : "rgb(255,255,138)" }
+    ];
+
+    var applyColorsToTile = function($tile) {
+
+      for (var i = 0, len = patternsAndColors.length; i < len; i++) {
+        var tile = $tile[0];
+        var regExp = patternsAndColors[i]['regExp'];
+
+        // Check for pattern match and apply styles
+        var taskTitle = $(tile).find('.witTitle').text()
+
+        if (taskTitle && taskTitle.match(regExp))  {
+          var cssRule = patternsAndColors[i]['color'];
+          // Only apply background color if the user's name isn't highlighted
+          if (!$tile.data('hasNameHighlightModifications')) {
+            tile.style.backgroundColor = cssRule;
+          }
+          tile.style.borderLeftColor = App.util.rgbOffsetBy(cssRule, -20);
+        }
+      };
+    }
+
+    App.util.eachTile(function($tile) {
+      applyColorsToTile($tile);
+    });
+
+    $('#taskboard-table').on('DOMSubtreeModified', 'div.tbTile .tbTileContent', function(e){
+      applyColorsToTile($(e.target));
+    });
+    
+  },
+
   applyNameHighlightingForAllTiles: function () {
     // Iterate through all tiles, store their current color values,
     // and apply highllighting whenever matches occur
-    var allTiles = $('#taskboard-table div.tbTile .tbTileContent').each(function(i, el){
+    App.util.eachTile(function($el) {
       // First store current background-color and border-left-color values
-      var $el = $(el);
+      var el = $el[0];
       $el.data('originalBackgroundColor', el.style.backgroundColor);
       $el.data('originalBorderLeftColor', el.style.borderLeftColor);
       $el.find('.witAssignedTo').data('originalAssigneeTextColor', el.style.borderLeftColor);
 
       // Apply name highlighting to matches
-      App.toggleNameHighlightingForTile(el);
+      App.toggleNameHighlightingForTile($el);
     });
   },
 
-  toggleNameHighlightingForTile: function (tile) {
+  toggleNameHighlightingForTile: function ($tile) {
+    var tile = $tile[0];
 
     var username = App.userSettings.nameHighlightUsername;
     var userColor = App.userSettings.nameHighlightColor;
@@ -315,16 +357,16 @@ var App = {
       tile.style.backgroundColor = userColor;
       tile.style.borderLeftColor = App.util.rgbOffsetBy(userColor, -20);
       assigneeEl.style.color = App.util.rgbOffsetBy(userColor, -110);
-      $(assigneeEl).data('hasHighlightModifications', true);
+      $(tile).data('hasNameHighlightModifications', true);
     }
-    else if ($(assigneeEl).data('hasHighlightModifications') === true) {
+    else if ($(tile).data('hasNameHighlightModifications') === true) {
       tile.style.borderLeftColor = $(tile).data('originalBorderLeftColor');
       tile.style.backgroundColor = $(tile).data('originalBackgroundColor');
 
       if (assigneeEl)
         assigneeEl.style.color = $(tile).data('originalAssigneeTextColor');
 
-      $(assigneeEl).data('hasHighlightModifications', false);
+      $(tile).data('hasNameHighlightModifications', false);
     }
   },
 
@@ -356,6 +398,12 @@ var App = {
         parseInt(colorMatch[3]) + offset
       ];
       return 'rgb(' + colorParts.join(',') + ')';
+    },
+
+    eachTile : function (fn) {
+      $('#taskboard-table div.tbTile .tbTileContent').each(function(i, el) {
+        fn($(el));
+      });
     }
   }
 };
